@@ -1,26 +1,26 @@
 [
   {
-    "name": "Example Character 1",
-    "cover": "example1.png",
-    "positive_prompt": "masterpiece, 1girl, highly detailed, looking at viewer",
-    "negative_prompt": "low quality, bad hands, text",
-    "lora1_path": "lora_char1_v1.safetensors",
+    "name": "shiranui mai",
+    "cover": "shiranui mai.png",
+    "positive_prompt": "shiranui mai,1girl ,ponytail,long hair,pelvic curtain,cleavage,brown hair,huge breasts,brown eyes,no bra,red japanese clothes,covered nipples",
+    "negative_prompt": "pants,bra",
+    "lora1_path": "SDXL\\ill\\Mai iIlluLoRA DG .safetensors",
     "lora1_weight": 0.8,
-    "lora1_trigger": "char1_trigger",
-    "lora2_path": "lora_style1.safetensors",
-    "lora2_weight": 0.5,
-    "lora2_trigger": "style1_trigger"
+    "lora1_trigger": "maishirandg",
+    "lora2_path": "SDXL\\ill\\outfit\\mai-shiranui-cosplay-illustriousxl-lora-nochekaiser.safetensors",
+    "lora2_weight": 0.3,
+    "lora2_trigger": "mai shiranui cosplay, shiranui mai (cosplay), bare hips, pelvic curtain, ninja, revealing clothes, sleeveless kimono, rope"
   },
   {
-    "name": "Example Character 2",
-    "cover": "example2.png",
-    "positive_prompt": "masterpiece, 1boy, cool, cyber-tech outfit",
-    "negative_prompt": "low quality, bad hands, text",
-    "lora1_path": "lora_char2_v2.safetensors",
-    "lora1_weight": 0.9,
-    "lora1_trigger": "char2_trigger",
-    "lora2_path": "lora_style2.safetensors",
-    "lora2_weight": 0.3,
-    "lora2_trigger": "style2_trigger"
+    "name": "fiona frost",
+    "cover": "fiona frost.png",
+    "positive_prompt": "fiona frost,1girl , white hair, short hair, black eyes,hair over one eye,large breasts",
+    "negative_prompt": "",
+    "lora1_path": "SDXL\\ill\\charater\\illu_Fiona_Frost_2-63.safetensors",
+    "lora1_weight": 0.8,
+    "lora1_trigger": "",
+    "lora2_path": "",
+    "lora2_weight": 0,
+    "lora2_trigger": ""
   }
 ]
