@@ -1,0 +1,26 @@
+[
+  {
+    "name": "Example Character 1",
+    "cover": "example1.png",
+    "positive_prompt": "masterpiece, 1girl, highly detailed, looking at viewer",
+    "negative_prompt": "low quality, bad hands, text",
+    "lora1_path": "lora_char1_v1.safetensors",
+    "lora1_weight": 0.8,
+    "lora1_trigger": "char1_trigger",
+    "lora2_path": "lora_style1.safetensors",
+    "lora2_weight": 0.5,
+    "lora2_trigger": "style1_trigger"
+  },
+  {
+    "name": "Example Character 2",
+    "cover": "example2.png",
+    "positive_prompt": "masterpiece, 1boy, cool, cyber-tech outfit",
+    "negative_prompt": "low quality, bad hands, text",
+    "lora1_path": "lora_char2_v2.safetensors",
+    "lora1_weight": 0.9,
+    "lora1_trigger": "char2_trigger",
+    "lora2_path": "lora_style2.safetensors",
+    "lora2_weight": 0.3,
+    "lora2_trigger": "style2_trigger"
+  }
+]
