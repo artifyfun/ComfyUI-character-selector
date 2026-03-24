@@ -11,7 +11,7 @@ app.registerExtension({
 
                 // Create a generic placeholder for the image
                 const imgWidget = {
-                    type: "HTML",
+                    type: "CHARACTER_PREVIEW",
                     name: "preview",
                     draw(ctx, node, widget_width, y, widget_height) {
                         if (!this.img || !this.img.complete || this.img.naturalWidth === 0) return;
@@ -22,12 +22,16 @@ app.registerExtension({
                         const height = width * aspectRatio;
                         
                         ctx.drawImage(this.img, margin, y, width, height);
-                        this.computedHeight = height + 10;
                     },
                     computeSize() {
-                        return [200, this.computedHeight || 0];
+                        const width = this.node ? this.node.size[0] : 200;
+                        if (this.img && this.img.complete && this.img.naturalWidth > 0) {
+                            const aspectRatio = this.img.naturalHeight / this.img.naturalWidth;
+                            return [width, (width - 20) * aspectRatio + 10];
+                        }
+                        return [width, this.img && this.img.src ? 100 : 0];
                     },
-                    computedHeight: 0,
+                    node: this,
                     img: new Image()
                 };
                 
@@ -39,7 +43,7 @@ app.registerExtension({
                     const name = characterWidget.value;
                     if (!name || name === "None") {
                         imgWidget.img.src = "";
-                        imgWidget.computedHeight = 0;
+                        this.setSize(this.computeSize());
                         return;
                     }
                     
@@ -49,19 +53,22 @@ app.registerExtension({
                         const character = data.find(c => c.name === name);
                         
                         if (character && character.cover) {
-                            // Point to the custom route that serves the image
-                            imgWidget.img.src = `/character_selector/view_cover?filename=${encodeURIComponent(character.cover)}`;
-                            imgWidget.img.onload = () => {
-                                this.setDirtyCanvas(true, true);
-                            };
+                            const newSrc = `/character_selector/view_cover?filename=${encodeURIComponent(character.cover)}`;
+                            if (imgWidget.img.src !== newSrc) {
+                                imgWidget.img.src = newSrc;
+                                imgWidget.img.onload = () => {
+                                    this.setSize(this.computeSize());
+                                    this.setDirtyCanvas(true, true);
+                                };
+                            }
                         } else {
                             imgWidget.img.src = "";
-                            imgWidget.computedHeight = 0;
+                            this.setSize(this.computeSize());
                         }
                     } catch (e) {
                         console.error("Failed to load character preview", e);
                         imgWidget.img.src = "";
-                        imgWidget.computedHeight = 0;
+                        this.setSize(this.computeSize());
                     }
                     this.setDirtyCanvas(true, true);
                 };
