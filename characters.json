@@ -1,7 +1,7 @@
 [
   {
     "name": "shiranui mai",
-    "cover": "shiranui mai.png",
+    "cover": "shiranui mai.jpeg",
     "positive_prompt": "shiranui mai,1girl ,ponytail,long hair,pelvic curtain,cleavage,brown hair,huge breasts,brown eyes,no bra,red japanese clothes,covered nipples",
     "negative_prompt": "pants,bra",
     "lora1_path": "SDXL\\ill\\Mai iIlluLoRA DG .safetensors",
@@ -13,7 +13,7 @@
   },
   {
     "name": "fiona frost",
-    "cover": "fiona frost.png",
+    "cover": "fiona frost.webp",
     "positive_prompt": "fiona frost,1girl , white hair, short hair, black eyes,hair over one eye,large breasts",
     "negative_prompt": "",
     "lora1_path": "SDXL\\ill\\charater\\illu_Fiona_Frost_2-63.safetensors",
