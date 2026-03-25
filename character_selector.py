@@ -3,6 +3,31 @@ import os
 from server import PromptServer
 from aiohttp import web
 
+def get_character_data():
+    base_path = os.path.dirname(os.path.realpath(__file__))
+    json_path = os.path.join(base_path, "characters.json")
+    custom_path = os.path.join(base_path, "characters_custom.json")
+    
+    all_data = []
+    
+    # Load base characters
+    if os.path.exists(json_path):
+        try:
+            with open(json_path, "r", encoding="utf-8") as f:
+                all_data.extend(json.load(f))
+        except Exception as e:
+            print(f"CharacterSelector Error: Failed to load characters.json: {e}")
+            
+    # Load custom characters
+    if os.path.exists(custom_path):
+        try:
+            with open(custom_path, "r", encoding="utf-8") as f:
+                all_data.extend(json.load(f))
+        except Exception as e:
+            print(f"CharacterSelector Error: Failed to load characters_custom.json: {e}")
+            
+    return all_data
+
 class CharacterSelectorNode:
     """
     A ComfyUI custom node that allows users to select characters from a JSON file.
@@ -11,19 +36,10 @@ class CharacterSelectorNode:
     
     @classmethod
     def INPUT_TYPES(s):
-        # Locate the JSON file in the same directory as the script
-        json_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "characters.json")
-        
-        names = ["None"]
-        if os.path.exists(json_path):
-            try:
-                with open(json_path, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    names = [char.get("name", "Unknown") for char in data if "name" in char]
-            except Exception as e:
-                print(f"CharacterSelector Error: Failed to load characters.json: {e}")
-        else:
-            print(f"CharacterSelector Warning: characters.json not found at {json_path}")
+        data = get_character_data()
+        names = [char.get("name", "Unknown") for char in data if "name" in char]
+        if not names:
+            names = ["None"]
 
         return {
             "required": {
@@ -48,16 +64,9 @@ class CharacterSelectorNode:
     CATEGORY = "CustomNodes/Character"
 
     def select_character(self, character_name):
-        json_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "characters.json")
-        
         default_return = ("", "", "", "", 0.0, "", "", 0.0, "")
-        
-        if not os.path.exists(json_path):
-            return default_return
-            
         try:
-            with open(json_path, "r", encoding="utf-8") as f:
-                data = json.load(f)
+            data = get_character_data()
             
             # Find the character by name
             char = next((c for c in data if c.get("name") == character_name), None)
@@ -74,7 +83,6 @@ class CharacterSelectorNode:
                     float(char.get("lora2_weight", 0.0)),
                     str(char.get("lora2_trigger", ""))
                 )
-                
         except Exception as e:
             print(f"CharacterSelector Error: {e}")
             
@@ -83,12 +91,8 @@ class CharacterSelectorNode:
 # Serve character data and images for the preview
 @PromptServer.instance.routes.get("/character_selector/get_characters")
 async def get_characters(request):
-    json_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "characters.json")
-    if os.path.exists(json_path):
-        with open(json_path, "r", encoding="utf-8") as f:
-            data = json.load(f)
-            return web.json_response(data)
-    return web.json_response([])
+    data = get_character_data()
+    return web.json_response(data)
 
 @PromptServer.instance.routes.get("/character_selector/view_cover")
 async def view_cover(request):
@@ -96,15 +100,24 @@ async def view_cover(request):
     if not filename:
         return web.Response(status=404)
         
-    covers_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), "covers")
-    filepath = os.path.join(covers_path, filename)
+    base_path = os.path.dirname(os.path.realpath(__file__))
+    covers_path = os.path.join(base_path, "covers")
+    custom_covers_path = os.path.join(base_path, "covers_custom")
     
-    # Simple security check to stay within covers directory
-    if os.path.commonpath([covers_path, os.path.abspath(filepath)]) != covers_path:
-        return web.Response(status=403)
-        
+    # Try custom covers first
+    filepath = os.path.join(custom_covers_path, filename)
     if os.path.exists(filepath):
-        return web.FileResponse(filepath)
+        # Security check
+        if os.path.commonpath([custom_covers_path, os.path.abspath(filepath)]) == custom_covers_path:
+            return web.FileResponse(filepath)
+            
+    # Then try base covers
+    filepath = os.path.join(covers_path, filename)
+    if os.path.exists(filepath):
+        # Security check
+        if os.path.commonpath([covers_path, os.path.abspath(filepath)]) == covers_path:
+            return web.FileResponse(filepath)
+            
     return web.Response(status=404)
 
 # Registration mappings for ComfyUI
