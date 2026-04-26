@@ -47,30 +47,31 @@ class CharacterSelectorNode:
             }
         }
 
-    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING", "FLOAT", "STRING", "STRING", "FLOAT", "STRING")
+    RETURN_TYPES = ("STRING", "STRING", "STRING", "STRING", "FLOAT", "STRING", "STRING", "FLOAT", "STRING", "STRING")
     RETURN_NAMES = (
-        "Name", 
-        "Positive Prompt", 
-        "Negative Prompt", 
-        "LoRA 1 Path", 
-        "LoRA 1 Weight", 
-        "LoRA 1 Trigger", 
-        "LoRA 2 Path", 
-        "LoRA 2 Weight", 
-        "LoRA 2 Trigger"
+        "Name",
+        "Positive Prompt",
+        "Negative Prompt",
+        "LoRA 1 Path",
+        "LoRA 1 Weight",
+        "LoRA 1 Trigger",
+        "LoRA 2 Path",
+        "LoRA 2 Weight",
+        "LoRA 2 Trigger",
+        "Source"
     )
     
     FUNCTION = "select_character"
     CATEGORY = "CustomNodes/Character"
 
     def select_character(self, character_name):
-        default_return = ("", "", "", "", 0.0, "", "", 0.0, "")
+        default_return = ("", "", "", "", 0.0, "", "", 0.0, "", "")
         try:
             data = get_character_data()
-            
+
             # Find the character by name
             char = next((c for c in data if c.get("name") == character_name), None)
-            
+
             if char:
                 return (
                     str(char.get("name", "")),
@@ -81,7 +82,8 @@ class CharacterSelectorNode:
                     str(char.get("lora1_trigger", "")),
                     str(char.get("lora2_path", "")),
                     float(char.get("lora2_weight", 0.0)),
-                    str(char.get("lora2_trigger", ""))
+                    str(char.get("lora2_trigger", "")),
+                    str(char.get("source", ""))
                 )
         except Exception as e:
             print(f"CharacterSelector Error: {e}")
