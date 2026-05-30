@@ -5,7 +5,7 @@
     "source": "the king of fighters",
     "positive_prompt": "shiranui mai,1girl ,ponytail,long hair,pelvic curtain,cleavage,brown hair,huge breasts,brown eyes,no bra,red japanese clothes,covered nipples",
     "negative_prompt": "pants,bra",
-    "lora1_path": "SDXL\\ill\\Mai iIlluLoRA DG .safetensors",
+    "lora1_path": "SDXL\\ill\\charater\\Mai iIlluLoRA DG .safetensors",
     "lora1_weight": 0.8,
     "lora1_trigger": "maishirandg",
     "lora2_path": "SDXL\\ill\\outfit\\mai-shiranui-cosplay-illustriousxl-lora-nochekaiser.safetensors",
